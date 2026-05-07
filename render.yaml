@@ -93,13 +93,13 @@ services:
       - key: FRONTEND_URL
         fromService:
           name: fitness-frontend
-          type: web
+          type: static
           property: host
       - key: JWK_SET_URI
         sync: false # Set this to your production Keycloak URL in Render dashboard
 
   # 7. Frontend
-  - type: web
+  - type: static
     name: fitness-frontend
     env: static
     buildCommand: cd fitness-app-frontend && npm install && npm run build
