@@ -5,7 +5,7 @@ services:
     env: docker
     dockerContext: ./eureka
     dockerfilePath: ./eureka/Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: JAVA_OPTS
         value: "-Xmx256m -Xms128m"
@@ -16,7 +16,7 @@ services:
     env: docker
     dockerContext: ./configServer
     dockerfilePath: ./configServer/Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
         value: http://eureka-server:8761/eureka/
@@ -31,7 +31,7 @@ services:
     env: docker
     dockerContext: ./userservice
     dockerfilePath: ./userservice/Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: SPRING_CONFIG_IMPORT
         value: optional:configserver:http://config-server:8888
@@ -50,7 +50,7 @@ services:
     env: docker
     dockerContext: .
     dockerfilePath: activityservice/Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: SPRING_CONFIG_IMPORT
         value: optional:configserver:http://config-server:8888
@@ -67,7 +67,7 @@ services:
     env: docker
     dockerContext: .
     dockerfilePath: aiservice/Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: SPRING_CONFIG_IMPORT
         value: optional:configserver:http://config-server:8888
@@ -84,7 +84,7 @@ services:
     env: docker
     dockerContext: ./gateway
     dockerfilePath: ./gateway/Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: SPRING_CONFIG_IMPORT
         value: optional:configserver:http://config-server:8888
@@ -104,7 +104,7 @@ services:
     env: docker
     dockerContext: ./fitness-app-frontend
     dockerfilePath: ./fitness-app-frontend/Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: VITE_API_URL
         fromService:
