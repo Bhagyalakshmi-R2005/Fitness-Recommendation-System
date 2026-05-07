@@ -98,9 +98,8 @@ services:
       - key: JWK_SET_URI
         sync: false # Set this to your production Keycloak URL in Render dashboard
 
-  # 7. Frontend
-  - type: static
-    name: fitness-frontend
+staticSites:
+  - name: fitness-frontend
     env: static
     buildCommand: cd fitness-app-frontend && npm install && npm run build
     publishPath: ./fitness-app-frontend/dist
