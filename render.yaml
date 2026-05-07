@@ -4,7 +4,7 @@ services:
     name: eureka-server
     env: docker
     dockerContext: ./eureka
-    dockerFilePath: ./eureka/Dockerfile
+    dockerfilePath: ./eureka/Dockerfile
     plan: starter
     envVars:
       - key: JAVA_OPTS
@@ -15,7 +15,7 @@ services:
     name: config-server
     env: docker
     dockerContext: ./configServer
-    dockerFilePath: ./configServer/Dockerfile
+    dockerfilePath: ./configServer/Dockerfile
     plan: starter
     envVars:
       - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
@@ -30,7 +30,7 @@ services:
     name: user-service
     env: docker
     dockerContext: ./userservice
-    dockerFilePath: ./userservice/Dockerfile
+    dockerfilePath: ./userservice/Dockerfile
     plan: starter
     envVars:
       - key: SPRING_CONFIG_IMPORT
@@ -49,7 +49,7 @@ services:
     name: activity-service
     env: docker
     dockerContext: .
-    dockerFilePath: activityservice/Dockerfile
+    dockerfilePath: activityservice/Dockerfile
     plan: starter
     envVars:
       - key: SPRING_CONFIG_IMPORT
@@ -66,7 +66,7 @@ services:
     name: ai-service
     env: docker
     dockerContext: .
-    dockerFilePath: aiservice/Dockerfile
+    dockerfilePath: aiservice/Dockerfile
     plan: starter
     envVars:
       - key: SPRING_CONFIG_IMPORT
@@ -83,7 +83,7 @@ services:
     name: api-gateway
     env: docker
     dockerContext: ./gateway
-    dockerFilePath: ./gateway/Dockerfile
+    dockerfilePath: ./gateway/Dockerfile
     plan: starter
     envVars:
       - key: SPRING_CONFIG_IMPORT
