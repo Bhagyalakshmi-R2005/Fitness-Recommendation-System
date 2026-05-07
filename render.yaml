@@ -93,16 +93,18 @@ services:
       - key: FRONTEND_URL
         fromService:
           name: fitness-frontend
-          type: static
+          type: web
           property: host
       - key: JWK_SET_URI
         sync: false # Set this to your production Keycloak URL in Render dashboard
 
-staticSites:
-  - name: fitness-frontend
-    env: static
-    buildCommand: cd fitness-app-frontend && npm install && npm run build
-    publishPath: ./fitness-app-frontend/dist
+  # 7. Frontend
+  - type: web
+    name: fitness-frontend
+    env: docker
+    dockerContext: ./fitness-app-frontend
+    dockerfilePath: ./fitness-app-frontend/Dockerfile
+    plan: starter
     envVars:
       - key: VITE_API_URL
         fromService:
