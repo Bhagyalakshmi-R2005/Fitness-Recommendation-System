@@ -1,0 +1,105 @@
+services:
+  # 1. Eureka Server
+  - type: web
+    name: eureka-server
+    env: docker
+    dockerContext: ./eureka
+    dockerFilePath: ./eureka/Dockerfile
+    plan: starter
+    envVars:
+      - key: JAVA_OPTS
+        value: "-Xmx256m -Xms128m"
+
+  # 2. Config Server
+  - type: web
+    name: config-server
+    env: docker
+    dockerContext: ./configServer
+    dockerFilePath: ./configServer/Dockerfile
+    plan: starter
+    envVars:
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        value: http://eureka-server:8761/eureka/
+      - key: SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS
+        value: "classpath:/config"
+      - key: JAVA_OPTS
+        value: "-Xmx256m -Xms128m"
+
+  # 3. User Service
+  - type: web
+    name: user-service
+    env: docker
+    dockerContext: ./userservice
+    dockerFilePath: ./userservice/Dockerfile
+    plan: starter
+    envVars:
+      - key: SPRING_CONFIG_IMPORT
+        value: optional:configserver:http://config-server:8888
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        value: http://eureka-server:8761/eureka/
+      - key: SPRING_DATASOURCE_URL
+        sync: false # Set your DB URL in Render dashboard
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+
+  # 4. Activity Service
+  - type: web
+    name: activity-service
+    env: docker
+    dockerContext: .
+    dockerFilePath: activityservice/Dockerfile
+    plan: starter
+    envVars:
+      - key: SPRING_CONFIG_IMPORT
+        value: optional:configserver:http://config-server:8888
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        value: http://eureka-server:8761/eureka/
+      - key: SPRING_DATA_MONGODB_URI
+        sync: false # Use MongoDB Atlas
+      - key: SPRING_RABBITMQ_HOST
+        sync: false # Use CloudAMQP
+
+  # 5. AI Service
+  - type: web
+    name: ai-service
+    env: docker
+    dockerContext: .
+    dockerFilePath: aiservice/Dockerfile
+    plan: starter
+    envVars:
+      - key: SPRING_CONFIG_IMPORT
+        value: optional:configserver:http://config-server:8888
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        value: http://eureka-server:8761/eureka/
+      - key: GROQ_API_KEY
+        sync: false
+      - key: SPRING_DATA_MONGODB_URI
+        sync: false
+
+  # 6. API Gateway
+  - type: web
+    name: api-gateway
+    env: docker
+    dockerContext: ./gateway
+    dockerFilePath: ./gateway/Dockerfile
+    plan: starter
+    envVars:
+      - key: SPRING_CONFIG_IMPORT
+        value: optional:configserver:http://config-server:8888
+      - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        value: http://eureka-server:8761/eureka/
+
+  # 7. Frontend
+  - type: web
+    name: fitness-frontend
+    env: static
+    buildCommand: cd fitness-app-frontend && npm install && npm run build
+    publishPath: ./fitness-app-frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: api-gateway
+          type: web
+          property: host
