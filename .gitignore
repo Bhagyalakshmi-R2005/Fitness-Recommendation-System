@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+dist/
+build/
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Java
+target/
+*.class
+.mvn/
+mvnw
+mvnw.cmd
+
+# OS
+.DS_Store
+Thumbs.db

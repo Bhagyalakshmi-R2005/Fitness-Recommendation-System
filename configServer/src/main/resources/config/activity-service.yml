@@ -1,0 +1,31 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongo-db:27017/fitnessactivity?retryWrites=true&w=majority
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.web.client.RestClientAutoConfiguration
+
+server:
+  port: 8082
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+
+app:
+  rabbitmq:
+    exchange:
+      name: fitness.exchange
+    queue:
+      name: activity.queue
+    routing:
+      key: activity.tracking

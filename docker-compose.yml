@@ -1,0 +1,136 @@
+services:
+  # Infrastructure
+  mysql-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fitness_user_db
+    ports:
+      - "3307:3306"
+    networks:
+      - fitness-network
+
+  mongo-db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - fitness-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - fitness-network
+
+  eureka-server:
+    build: ./eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - fitness-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  config-server:
+    build: ./configServer
+    ports:
+      - "8888:8888"
+    depends_on:
+      eureka-server:
+        condition: service_started
+    networks:
+      - fitness-network
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=classpath:/config
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  # Microservices
+  user-service:
+    build: ./userservice
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql-db
+      - config-server
+    networks:
+      - fitness-network
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/fitness_user_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  activity-service:
+    build:
+      context: .
+      dockerfile: activityservice/Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mongo-db
+      - rabbitmq
+      - config-server
+    networks:
+      - fitness-network
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo-db:27017/fitnessactivity
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - APP_RABBITMQ_EXCHANGE_NAME=fitness_exchange
+      - APP_RABBITMQ_ROUTING_KEY=activity_key
+
+  ai-service:
+    build:
+      context: .
+      dockerfile: aiservice/Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mongo-db
+      - rabbitmq
+      - config-server
+    networks:
+      - fitness-network
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo-db:27017/fitnessrecommendation
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - APP_RABBITMQ_EXCHANGE_NAME=fitness_exchange
+      - APP_RABBITMQ_ROUTING_KEY=activity_key
+      - APP_RABBITMQ_QUEUE_NAME=activity_queue
+
+  api-gateway:
+    build: ./gateway
+    ports:
+      - "9090:9090"
+    depends_on:
+      - config-server
+    networks:
+      - fitness-network
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://host.docker.internal:8080/realms/fitness-oauth2/protocol/openid-connect/certs
+
+  # Frontend
+  fitness-frontend:
+    build: ./fitness-app-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - fitness-network
+
+networks:
+  fitness-network:
+    driver: bridge

@@ -1,0 +1,36 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongo-db:27017/fitnessrecommendation
+      database: fitnessrecommendation
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+
+app:
+  rabbitmq:
+    exchange:
+      name: fitness.exchange
+    queue:
+      name: activity.queue
+    routing:
+      key: activity.tracking
+
+rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+
+
+server:
+  port: 8083
+
+
+groq:
+  api:
+    key: ${GROQ_API_KEY}
