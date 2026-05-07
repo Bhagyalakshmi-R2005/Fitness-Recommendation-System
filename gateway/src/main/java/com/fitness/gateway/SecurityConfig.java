@@ -35,14 +35,22 @@ public class SecurityConfig {
     @Bean
     public org.springframework.security.oauth2.jwt.ReactiveJwtDecoder jwtDecoder() {
         // This tells the Gateway to get the keys from Keycloak but ignore the name mismatch (localhost vs host.docker.internal)
-        String jwkSetUri = "http://host.docker.internal:8080/realms/fitness-oauth2/protocol/openid-connect/certs";
+        String jwkSetUri = System.getenv("JWK_SET_URI");
+        if (jwkSetUri == null || jwkSetUri.isEmpty()) {
+            jwkSetUri = "http://host.docker.internal:8080/realms/fitness-oauth2/protocol/openid-connect/certs";
+        }
         return org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        String frontendUrl = System.getenv("FRONTEND_URL");
+        if (frontendUrl != null && !frontendUrl.isEmpty()) {
+            configuration.setAllowedOrigins(Arrays.asList(frontendUrl, "http://localhost:5173"));
+        } else {
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        }
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-User-Id"));
         configuration.setAllowCredentials(true);
