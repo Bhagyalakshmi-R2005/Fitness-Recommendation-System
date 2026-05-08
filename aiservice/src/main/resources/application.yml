@@ -8,3 +8,12 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+
+app:
+  rabbitmq:
+    exchange:
+      name: ${APP_RABBITMQ_EXCHANGE_NAME:fitness.exchange}
+    routing:
+      key: ${APP_RABBITMQ_ROUTING_KEY:activity.tracking}
+    queue:
+      name: ${APP_RABBITMQ_QUEUE_NAME:activity.queue}
