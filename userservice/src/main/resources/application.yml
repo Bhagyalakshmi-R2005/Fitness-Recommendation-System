@@ -4,16 +4,22 @@ spring:
   config:
     import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
   
+  server:
+    port: ${PORT:8081}
+
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/fitness_user_db?createDatabaseIfNotExist=true}
-    username: ${SPRING_DATASOURCE_USERNAME:root}
-    password: ${SPRING_DATASOURCE_PASSWORD:root}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql-16aa5adb-bhagyalakshmirbhagya1-b42d.k.aivencloud.com:15885/fitness_user_db?createDatabaseIfNotExist=true&useSSL=true&requireSSL=true}
+    username: ${SPRING_DATASOURCE_USERNAME:avnadmin}
+    password: ${SPRING_DATASOURCE_PASSWORD:your_aiven_password_here}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
     show-sql: true
 
 eureka:
