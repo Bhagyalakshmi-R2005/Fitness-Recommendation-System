@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 @Configuration
-public class RaabbitMqConfig {
-
-    @Value("${app.rabbitmq.queue.name}")
+public class RabbitMqConfig {
+ 
+    @Value("${app.rabbitmq.queue.name:activity.queue}")
     private String queue;
-    @Value("${app.rabbitmq.exchange.name}")
+    @Value("${app.rabbitmq.exchange.name:fitness.exchange}")
     private String exchange;
-    @Value("${app.rabbitmq.routing.key}")
+    @Value("${app.rabbitmq.routing.key:activity.tracking}")
     private String routingKey;
     @Bean
     public Queue activityQueue() {

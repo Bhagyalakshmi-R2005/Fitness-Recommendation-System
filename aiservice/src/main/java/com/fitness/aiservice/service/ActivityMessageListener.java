@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ActivityMessageListener {
     private final ActivityAIService activityAIService;
-    @RabbitListener(queues = "${app.rabbitmq.queue.name}", containerFactory = "rabbitListenerContainerFactory")
+    @RabbitListener(queues = "${app.rabbitmq.queue.name:activity.queue}", containerFactory = "rabbitListenerContainerFactory")
     public void processActivity(Activity activity){
         log.info("Received activity for processing: {}", activity.getId());
         String result = activityAIService.generateRecommendation(activity);

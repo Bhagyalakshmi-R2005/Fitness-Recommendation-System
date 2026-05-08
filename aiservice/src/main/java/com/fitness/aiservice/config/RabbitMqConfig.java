@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfig {
 
-    @Value("${app.rabbitmq.queue.name}")
+    @Value("${app.rabbitmq.queue.name:activity.queue}")
     private String queue;
-    @Value("${app.rabbitmq.exchange.name}")
+    @Value("${app.rabbitmq.exchange.name:fitness.exchange}")
     private String exchange;
-    @Value("${app.rabbitmq.routing.key}")
+    @Value("${app.rabbitmq.routing.key:activity.tracking}")
     private String routingKey;
     @Bean
     public Queue activityQueue() {
