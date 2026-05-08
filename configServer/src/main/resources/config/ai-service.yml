@@ -1,9 +1,13 @@
 spring:
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:rabbitmq}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
   data:
     mongodb:
-      uri: mongodb://mongo-db:27017/fitnessrecommendation
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://mongo-db:27017/fitnessrecommendation}
       database: fitnessrecommendation
-
 
 eureka:
   client:
@@ -19,17 +23,8 @@ app:
     routing:
       key: activity.tracking
 
-rabbitmq:
-    host: rabbitmq
-    port: 5672
-    username: guest
-    password: guest
-
-
-
 server:
   port: 8083
-
 
 groq:
   api:

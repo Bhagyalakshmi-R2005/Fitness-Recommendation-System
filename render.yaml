@@ -43,6 +43,8 @@ services:
         sync: false
       - key: SPRING_DATASOURCE_PASSWORD
         sync: false
+      - key: JAVA_OPTS
+        value: "-Xmx256m -Xms128m"
 
   # 4. Activity Service
   - type: web
@@ -57,9 +59,17 @@ services:
       - key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
         value: http://eureka-server:8761/eureka/
       - key: SPRING_DATA_MONGODB_URI
-        sync: false # Use MongoDB Atlas
+        sync: false # Set your MongoDB Atlas URI in Render dashboard
       - key: SPRING_RABBITMQ_HOST
-        sync: false # Use CloudAMQP
+        sync: false # Set your CloudAMQP host in Render dashboard
+      - key: SPRING_RABBITMQ_PORT
+        value: "5672"
+      - key: SPRING_RABBITMQ_USERNAME
+        sync: false
+      - key: SPRING_RABBITMQ_PASSWORD
+        sync: false
+      - key: JAVA_OPTS
+        value: "-Xmx256m -Xms128m"
 
   # 5. AI Service
   - type: web
@@ -77,7 +87,16 @@ services:
         sync: false
       - key: SPRING_DATA_MONGODB_URI
         sync: false
-
+      - key: SPRING_RABBITMQ_HOST
+        sync: false
+      - key: SPRING_RABBITMQ_PORT
+        value: "5672"
+      - key: SPRING_RABBITMQ_USERNAME
+        sync: false
+      - key: SPRING_RABBITMQ_PASSWORD
+        sync: false
+      - key: JAVA_OPTS
+        value: "-Xmx256m -Xms128m"
   # 6. API Gateway
   - type: web
     name: api-gateway
@@ -97,6 +116,8 @@ services:
           property: host
       - key: JWK_SET_URI
         sync: false # Set this to your production Keycloak URL in Render dashboard
+      - key: JAVA_OPTS
+        value: "-Xmx256m -Xms128m"
 
   # 7. Frontend
   - type: web

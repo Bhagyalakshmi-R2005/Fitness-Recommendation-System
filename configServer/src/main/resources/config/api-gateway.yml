@@ -15,14 +15,14 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://host.docker.internal:8080/realms/fitness-oauth2/protocol/openid-connect/certs
+          jwk-set-uri: ${JWK_SET_URI:http://localhost:8080/realms/fitness-oauth2/protocol/openid-connect/certs}
 
   cloud:
     gateway:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:5173"
+            allowedOrigins: ${FRONTEND_URL:http://localhost:5173}
             allowedMethods:
               - GET
               - POST
