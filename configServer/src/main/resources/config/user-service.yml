@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql-16aa5adb-bhagyalakshmirbhagya1-b42d.k.aivencloud.com:15885/defaultdb?useSSL=true&requireSSL=true}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql-16aa5adb-bhagyalakshmirbhagya1-b42d.k.aivencloud.com:15885/fitness_user_db?createDatabaseIfNotExist=true&useSSL=true&requireSSL=true}
     username: ${SPRING_DATASOURCE_USERNAME:avnadmin}
     password: ${SPRING_DATASOURCE_PASSWORD:your_aiven_password_here}
     driver-class-name: com.mysql.cj.jdbc.Driver
