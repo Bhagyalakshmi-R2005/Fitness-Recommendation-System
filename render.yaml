@@ -9,6 +9,8 @@ services:
     envVars:
       - key: JAVA_OPTS
         value: "-Xmx256m -Xms128m"
+      - key: PORT
+        value: "8761"
 
   # 2. Config Server
   - type: web
@@ -24,6 +26,8 @@ services:
         value: "classpath:/config"
       - key: JAVA_OPTS
         value: "-Xmx256m -Xms128m"
+      - key: PORT
+        value: "8888"
 
   # 3. User Service
   - type: web
@@ -45,6 +49,8 @@ services:
         sync: false
       - key: JAVA_OPTS
         value: "-Xmx256m -Xms128m"
+      - key: PORT
+        value: "8081"
 
   # 4. Activity Service
   - type: web
@@ -70,6 +76,8 @@ services:
         sync: false
       - key: JAVA_OPTS
         value: "-Xmx256m -Xms128m"
+      - key: PORT
+        value: "8082"
 
   # 5. AI Service
   - type: web
@@ -97,6 +105,8 @@ services:
         sync: false
       - key: JAVA_OPTS
         value: "-Xmx256m -Xms128m"
+      - key: PORT
+        value: "8083"
   # 6. API Gateway
   - type: web
     name: api-gateway
@@ -118,6 +128,8 @@ services:
         sync: false # Set this to your production Keycloak URL in Render dashboard
       - key: JAVA_OPTS
         value: "-Xmx256m -Xms128m"
+      - key: PORT
+        value: "8080"
 
   # 7. Frontend
   - type: web
